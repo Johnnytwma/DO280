@@ -1,0 +1,1000 @@
+  713  oc create -n network-policy -f allow-specific.yaml
+  714  vim ~/DO280/labs/network-policy/allow-specific.yaml
+  715  oc get networkpolicies -n network-policy
+  716  oc login -u admin -p redhat
+  717  oc label namespace network-test name=network-test
+  718  oc describe namespace network-test
+  719  oc login -u developer -p developer
+  720  oc project network-test
+  721  oc rsh sample-app-7cf4f6ff64-ft897 curl 10.9.0.19:8080 | grep Hello
+  722  oc rsh sample-app-7cf4f6ff64-ft897 curl 10.9.0.18:8080 | grep Hello
+  723  oc rsh sample-app-7cf4f6ff64-ft897 curl 10.9.0.18:8081 | grep Hello
+  724  oc rsh sample-app-7cf4f6ff64-ft897 curl 10.9.0.19:8080 | grep Hello
+  725  vim ~/DO280/labs/network-policy/allow-from-openshift-ingress.yaml
+  726  oc create -n network-policy -f allow-from-openshift-ingress.yaml
+  727  oc get networkpolicies -n network-policy
+  728  oc login -u admin -p redhat
+  729  oc label namespace default network.openshift.io/policy-group=ingress
+  730  curl -s hello-network-policy.apps.ocp4.example.com | grep Hello
+  731  cd
+  732  lab network-policy finish
+  733  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  734  lab network-review start
+  735  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  736  oc new-project network-review
+  737  cd ~/DO280/labs/network-review
+  738  ls
+  739  pwd
+  740  vim php-http.yaml 
+  741  clear
+  742  vim php-http.yaml 
+  743  cd ~/DO280/labs/network-review
+  744  vim php-http.yaml 
+  745  oc create -f php-http.yaml
+  746  oc login -h
+  747  oc login -u developer -p developer -h
+  748  oc login -u developer -p developer -h http://api.ocp4.example.com:6443
+  749  oc login -u developer -p developer http://api.ocp4.example.com:6443
+  750  clear
+  751  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  752  lab network-review start
+  753  oc get proje
+  754  lab network-review finish
+  755  cd 
+  756  lab network-review finish
+  757  clear
+  758  lab network-review start
+  759  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  760  clear
+  761  oc new-project network-review
+  762  c
+  763  ls -a
+  764  vi .bashrc 
+  765  source ./.bashrc
+  766  c
+  767  oc get project
+  768  c
+  769  cd ~/DO280/labs/network-review
+  770  vim ~/DO280/labs/network-review/php-http.yaml
+  771  clear
+  772  ls
+  773  oc create -f php-http.yaml 
+  774  oc get pod
+  775  watch oc get pod
+  776  oc get pod
+  777  clear
+  778  oc get svc
+  779  oc expose php-http --hostname php-http.apps.ocp4.example.com
+  780  oc expose svc php-http --hostname php-http.apps.ocp4.example.com
+  781  c
+  782  oc get route
+  783  c
+  784  ls
+  785  c
+  786  ls
+  787  pwd
+  788  vim ~/DO280/labs/network-review/deny-all.yaml
+  789  c
+  790  ls
+  791  cat deny-all.yaml 
+  792  oc create -f deny-all.yaml 
+  793  oc get route
+  794  curl php-http.apps.ocp4.example.com
+  795  c
+  796  ls
+  797  cat allow-from-openshift-ingress.yaml 
+  798  vi allow-from-openshift-ingress.yaml 
+  799  c
+  800  cat allow-from-openshift-ingress.yaml 
+  801  c
+  802  oc login -u admin -p redhat
+  803  oc get label
+  804  clear
+  805  oc get nc
+  806  oc get namespace
+  807  oc get namespace -n default
+  808  oc get namespace -n default | grep netwo
+  809  c
+  810  c
+  811  curl -s php-http.apps.ocp4.example.com
+  812  curl -s php-http.apps.ocp4.example.com | grep PHP
+  813  curl -s php-http.apps.ocp4.example.com | grep "PHP"
+  814  c
+  815  ls
+  816  cat allow-from-openshift-ingress.yaml 
+  817  oc create -f allow-from-openshift-ingress.yaml 
+  818  curl -s http://php-http.apps.ocp4.example.com | grep "PHP"
+  819  c
+  820  oc login -u developer -p developer
+  821  cd certs/
+  822  ls
+  823  openssl req -new -key training.key -subj "/C=US/ST=North Carolina/L=Raleigh/O=Red Hat/\
+  824  CN=php-https.apps.ocp4.ezample.com" -out training.csr
+  825  more openssl-commands.txt 
+  826  openssl x509 -req -in training.csr CA training-CA.pem -CAkey training-CA.key -CAcreateserial -passin file:passphrase.txt -out training.crt -days 3650 -sha256 -extfile training.ext
+  827  openssl x509 -req -in training.csr  -CA training-CA.pem -CAkey training-CA.key -CAcreateserial  -passin file:passphrase.txt  -out training.crt -days 3650 -sha256 -extfile training.ext
+  828  clear
+  829  ll
+  830  ls -alt
+  831  cd ..
+  832  c
+  833  oc create secret -h
+  834  oc create secret tls -h
+  835  c
+  836  oc create secret tls -h | grep oc create
+  837  oc create secret tls -h >> help ; grep "oc create" help
+  838  ll
+  839  ll certs
+  840  oc create secret tls php-certs --cert=certs/training.crt --key=certs/training.key
+  841  oc get secrets 
+  842  c
+  843  cat php-https.yaml 
+  844  vi php-https.yaml 
+  845  grep "image","containerPort" php-https.yaml 
+  846  grep "image" & "containerPort" php-https.yaml 
+  847  clear
+  848  grep -e "image" -e "secretName" php-https.yaml 
+  849  grep -e "image:" -e "containerPort:" -e "secretName" php-https.yaml 
+  850  cat php-https.yaml 
+  851  grep -e "containerPort" php-https.yaml 
+  852  grep -e "containerPort" -e secretName" php-https.yaml 
+  853  c
+  854  oc create -f php-https.yaml 
+  855  vi php-https.yaml 
+  856  clear
+  857  grep -e "image:" -e "containerPort:" -e "secretName" php-https.yaml 
+  858  vi php-https
+  859  vi php-https.yaml 
+  860  c
+  861  oc create -f php-https.yaml 
+  862  vi php-https.yaml 
+  863  c
+  864  oc create -f php-https.yaml 
+  865  oc get svc
+  866  oc get pod
+  867  c
+  868  oc create route -h
+  869  oc create route passthrough -h
+  870  oc get route
+  871  c
+  872  oc create route passthrough php-https --service php-https --port 8443 --hostname php-https.apps.ocp4.example.com
+  873  oc get route
+  874  oc delete routes php-https
+  875  clear
+  876  oc get route
+  877  oc create route passthrough php-https --service php-https --port 8443
+  878  oc get route
+  879  oc delete routes php-https
+  880  oc create route passthrough php-https --service php-https 
+  881  oc get route
+  882  oc delete routes php-https
+  883  oc create route passthrough php-https --service php-https -h
+  884  oc create route passthrough php-https --service php-https > help
+  885  vi help 
+  886  oc delete routes php-https
+  887  oc create route passthrough php-https --service php-https -h > help
+  888  vim help 
+  889  oc get route -o wide
+  890  oc get route 
+  891  c
+  892  oc create route passthrough php-https --service php-https --port 8443 --hostname php-https.apps.ocp4.example.com
+  893  oc get route
+  894  c
+  895  curl -h
+  896  curl -h > help | grep "-v" help
+  897  curl -h > help | grep "v" help
+  898  curl -h > help
+  899  vim help
+  900  curl -h > help | grep v help
+  901  curl -h > help ; grep "-v" help
+  902  curl -h > help ; grep "v" help
+  903  curl -h > help ; grep "v," help
+  904  curl -h > help ; grep "cacert" help
+  905  c
+  906  curl -h > help ; grep "cacert" help
+  907  curl -v --cacert certs/training-CA.pem https://php-https.apps.ocp4.example.com
+  908  cd
+  909  lab network-review grade
+  910  lab network-review finish
+  911  c
+  912  lab network-review start
+  913  oc login -u developer -p developer https://api.ocp4.example.com:6443
+  914  oc new-project network-review
+  915  cd ~/DO280/labs/network-review
+  916  vim ~/DO280/labs/network-review/php-http.yaml
+  917  oc create -f php-http.yaml
+  918  oc get pods
+  919  c
+  920  oc expose svc php-http --hostname php-http.apps.ocp4.example.com
+  921  oc get routes
+  922  vim ~/DO280/labs/network-review/deny-all.yaml
+  923  oc create -f deny-all.yaml
+  924  curl http://php-http.apps.ocp4.example.com
+  925  vim allow-from-openshift-ingress.yaml
+  926  c
+  927  oc create -f allow-from-openshift-ingress.yaml
+  928  oc login -u admin -p redhat
+  929  oc label namespace default network.openshift.io/policy-group=ingress
+  930  oc get label
+  931  oc get label -n default
+  932  oc get default
+  933  c
+  934  oc get status
+  935  oc status
+  936  curl -s http://php-http.apps.ocp4.example.com | grep "PHP"
+  937  c
+  938  curl -s http://php-http.apps.ocp4.example.com | grep "PHP"
+  939  oc login -u developer -p developer
+  940  cd certs
+  941  openssl req -new -key training.key -subj "/C=US/ST=North Carolina/L=Raleigh/O=Red Hat/\
+  942  CN=php-https.apps.ocp4.example.com" -out training.csr
+  943  openssl x509 -req -in training.csr  -CA training-CA.pem -CAkey training-CA.key -CAcreateserial  -passin file:passphrase.txt  -out training.crt -days 3650 -sha256 -extfile training.ext
+  944  ls -l
+  945  cd ~/DO280/labs/network-review
+  946  c
+  947  oc create secret tls php-certs --cert certs/training.crt --key certs/training.key
+  948  oc get secrets
+  949  vim php-https.yaml
+  950  oc create -f php-https.yaml
+  951  oc get pods
+  952  c
+  953  oc create route passthrough php-https --service php-https --port 8443 --hostname php-https.apps.ocp4.example.com
+  954  oc get routes
+  955  c
+  956  curl -v --cacert certs/training-CA.pem https://php-https.apps.ocp4.example.com
+  957  c
+  958  cd
+  959  lab network-review grade
+  960  oc get namespace default
+  961  oc login -u admin -p redhat
+  962  oc get namespace default
+  963  oc get namespace default --show-labels 
+  964  oc label namespace default network.openshift.io/policy-group=ingress
+  965  oc label namespace default network.openshift.io/policy-group=ingress --overwrite
+  966  oc get namespace default --show-labels 
+  967  c
+  968  lab network-review grade
+  969  lab network-policy finish
+  970  lab review-troubleshoot start
+  971  source /usr/local/etc/ocp4.config
+  972  cat /usr/local/etc/ocp4.config 
+  973  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+  974  oc new-project review-troubleshoot
+  975  c
+  976  oc new-app -h
+  977  oc new-app -h > help 
+  978  grep "context" help
+  979  oc new-app --name hello-world-nginx https://github.com/RedHatTraining/DO280-apps --context-dir hello-world-nginx
+  980  c
+  981  oc get service
+  982  oc expose -h
+  983  oc expose -h > help
+  984  vi help
+  985  oc expose c
+  986  c
+  987  oc get service
+  988  oc expoe service hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+  989  c
+  990  oc get service
+  991  oc expose service hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+  992  c
+  993  oc get route
+  994  oc get pods
+  995  curl -h
+  996  c
+  997  grep -h
+  998  grep --help
+  999  c
+ 1000  oc get service
+ 1001  c
+ 1002  oc get route
+ 1003  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1004  curl -s http://hello-world.apps.ocp4.example.com | grep -i Hello
+ 1005  curl -s http://hello-world.apps.ocp4.example.com
+ 1006  touch /tmp/cluster-users
+ 1007  c
+ 1008  for USER in admin leader developer qa-engineer; do htpasswd -B -b /tmp/cluster-users "${USER}" review; done
+ 1009  oc create secret generic compreview-users --from-f
+ 1010  ile htpasswd=/tmp/cluster-users -n openshift-config
+ 1011  c
+ 1012  oc create secret generic compreview-users --from-file htpasswd=/tmp/cluster-users -n openshift-config
+ 1013  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+ 1014  cat /tmp/oauth.yaml 
+ 1015  vi /tmp/oauth.yaml
+ 1016  cat /tmp/oauth.yaml 
+ 1017  oc replace -f /tmp/oauth.yaml
+ 1018  c
+ 1019  oc adm policy add-cluster-role-to-user cluster-admin admin
+ 1020  c
+ 1021  oc get namespace
+ 1022  oc get pod
+ 1023* oc get pod
+ 1024  oc get pods -n openshift-authentication
+ 1025  oc get pods -n openshift-sdn
+ 1026  oc describe sdn-controller-cvdj2
+ 1027  oc describe pod  sdn-controller-cvdj2
+ 1028  oc describe pod  sdn-controller-cvdj2 -n openshift-sdn
+ 1029  c
+ 1030  oc get namespace
+ 1031  oc get namespace | more
+ 1032  c
+ 1033  oc get pods -n openshift-authentication
+ 1034  oc get pods -n openshift-etcd
+ 1035  c
+ 1036  oc get pods -n openshift-etcd
+ 1037  c
+ 1038  oc login -u admin -p review
+ 1039  for GROUP in leaders developers qa; do oc adm groups new "${GROUP}"; done
+ 1040  oc adm groups add-users leaders leader
+ 1041  oc adm groups add-users developers developer
+ 1042  oc adm groups add-users qa qa-engineer
+ 1043  oc adm policy add-cluster-role-to-group self-provisioner leaders
+ 1044  c
+ 1045  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+ 1046  oc policy add-role-to-group edit developers
+ 1047  oc policy add-role-to-group view qa
+ 1048  oc login -u developer -p review
+ 1049  oc new-app --name mysql --image registry.redhat.io/rhel8/mysql-80:1-139
+ 1050  c
+ 1051  oc create secret generic mysql --from-literal password=r3dh4t123
+ 1052  oc set env deployment mysql --prefix MYSQL_ROOT_ --from secret/mysql
+ 1053  oc set volumes deployment/mysql --name mysql-storage --add --type pvc --claim-size 2Gi --claim-mode rwo --mount-path /var/lib/mysql/data
+ 1054  oc get pods -l deployment=mysql
+ 1055  oc get pvc
+ 1056  oc exec -it  mysql-64749bcb58-rwwfm -- df -h /var/lib/mysql/data
+ 1057  c
+ 1058  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1059  c
+ 1060  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1061  oc create serviceaccount wordpress-sa
+ 1062  oc login -u admin -p review
+ 1063  oc adm policy add-scc-to-user anyuid -z wordpress-sa
+ 1064  oc login -u developer -p review
+ 1065  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1066  oc get pods -l deployment=mysql
+ 1067  oc exec mysql-fbf67ff96-c4sq7 -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1068  c
+ 1069  oc get pod
+ 1070  c
+ 1071  oc get pods -l deployment=mysql
+ 1072  oc exec mysql-mysql-64749bcb58-rwwfm -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1073  c
+ 1074  oc get pods -l deployment=mysql
+ 1075  oc exec mysql-64749bcb58-rwwfm -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1076  oc expose service wordpress --hostname wordpress.apps.ocp4.example.com
+ 1077  c
+ 1078  cat ~/DO280/labs/review-troubleshoot/deploy_famous-quotes.sh
+ 1079  c
+ 1080  ~/DO280/labs/review-troubleshoot/deploy_famous-quotes.sh
+ 1081  c
+ 1082  oc set env deployment famous-quotes --prefix QUOTES_ --from secret/mysql
+ 1083  oc get pods -l app=famous-quotes
+ 1084  oc get events --sort-by='{.lastTimestamp}' | grep -i Scheduling
+ 1085  oc get deployment/famous-quotes -o yaml > /tmp/famous-deploy.yaml
+ 1086  c
+ 1087  vim /tmp/famous-deploy.yaml
+ 1088  oc replace -f /tmp/famous-deploy.yaml
+ 1089  oc get pods -l app=famous-quotes
+ 1090  c
+ 1091  oc expose service famous-quotes --hostname quotes.apps.ocp4.example.com
+ 1092  c
+ 1093  curl -s "http://quotes.apps.ocp4.example.com" | egrep '</?title>'
+ 1094  lab review-troubleshoot grade
+ 1095  lab review-troubleshoot finish
+ 1096  c
+ 1097  lab review-template start
+ 1098  oc login -u admin -p redhat https://api.ocp4.example.com:6443
+ 1099  c
+ 1100  oc adm create-bootstrap-project-template -o yaml > ~/DO280/labs/review-template/project-template.yaml
+ 1101  cd ~/DO280/labs/review-template
+ 1102  vim project-template.yaml
+ 1103  ls sample-files
+ 1104  pwd
+ 1105  ls -al
+ 1106  pwd
+ 1107  vim ~/DO280/labs/review-template/project-template.yaml
+ 1108  c
+ 1109  vim ~/DO280/labs/review-template/project-template.yaml
+ 1110  c
+ 1111  oc create -f project-template.yaml -n openshift-config
+ 1112  vim ~/DO280/labs/review-template/project-template.yaml
+ 1113  oc whoami
+ 1114  ls -l
+ 1115  vi project-template.yaml 
+ 1116  c
+ 1117  oc create -f project-template.yaml -n openshift-config
+ 1118  vi project-template.yaml 
+ 1119  oc create -f project-template.yaml -n openshift-config
+ 1120  c
+ 1121  oc get templates -n openshift-config
+ 1122  oc edit projects.config.openshift.io/cluster
+ 1123  watch oc get pods -n openshift-apiserver
+ 1124  c
+ 1125  oc login -u developer -p developer
+ 1126  oc new-project review-template
+ 1127  oc get networkpolicies
+ 1128  oc get limitranges
+ 1129  oc get pod
+ 1130  watch oc get pods -n openshift-apiserver
+ 1131  oc whoami
+ 1132  c
+ 1133  oc login -u admin -p redhat https://api.ocp4.example.com:6443
+ 1134  watch oc get pods -n openshift-apiserver
+ 1135  oc get limitranges
+ 1136  oc edit projects.config.openshift.io/cluster
+ 1137  oc describe template project-request
+ 1138  oc get templates -n openshift-config
+ 1139  oc describe templates -n openshift-config
+ 1140  oc describe templates -n openshift-config | more
+ 1141  ls
+ 1142  ls -l
+ 1143  ls -l sample-files/
+ 1144  cd sample-files/
+ 1145  vi allow-from-openshift-ingress.yaml 
+ 1146  ls -l
+ 1147  cat allow-same-namespace.yaml 
+ 1148  cat limitrange.yaml 
+ 1149  oc get networkpolicies
+ 1150  oc get projects.
+ 1151  oc get projects | grep review
+ 1152  oc delete-project -h
+ 1153  oc -h > help
+ 1154  grep "delete" help
+ 1155  oc delete project review-template
+ 1156  oc whoami
+ 1157  cd ..
+ 1158  vi project-template.yaml 
+ 1159  c
+ 1160  oc get templaates -n openshift-config
+ 1161  oc get templates -n openshift-config
+ 1162  oc edit projects-config.openshift.io/cluster
+ 1163  oc whiami
+ 1164  oc whoami
+ 1165  oc get resource
+ 1166  oc get resourcequotas 
+ 1167  lab review-template start
+ 1168* l
+ 1169* vi project-template.y
+ 1170  lab review-template finish
+ 1171  cd
+ 1172  lab review-template finish
+ 1173  lab review-template start
+ 1174  lab review-template stop
+ 1175  lab review-template finish
+ 1176  lab review-template start
+ 1177  oc login -u admin -p redhat https://api.ocp4.example.com:6443
+ 1178  oc adm create-bootstrap-project-template -o yaml > ~/DO280/labs/review-template/project-template.yaml
+ 1179  cd ~/DO280/labs/review-template
+ 1180  echo ${PROJECT_NAME}
+ 1181  echo $PROJECT_NAME
+ 1182  vi project-template.yaml 
+ 1183  oc create -f project-template.yaml -n openshift-config
+ 1184  oc get -n openshift-config
+ 1185  oc get templates -n openshift-config
+ 1186  oc edit projects.config.openshift.io/cluster
+ 1187  watch oc get pods -n openshift-apiserver
+ 1188  oc login -u developer -p developer
+ 1189  oc new-project review-template
+ 1190  oc get networkpolicies
+ 1191  oc get limitranges
+ 1192  c
+ 1193  oc get resourcequotas
+ 1194  c
+ 1195  oc get project review-template --show-labels
+ 1196  oc new-app --name hello-secure --image quay.io/redhattraining/hello-world-secure:v1.0
+ 1197  watch oc get pods
+ 1198  c
+ 1199  oc create secret tls hello-tls --cert hello-secure-combined.pem --key hello-secure-key.pem
+ 1200  oc get pods
+ 1201  oc logs hello-secure-75dfcd4c9d-6lgwl 
+ 1202  oc set volumes deployment/hello-secure --add --type secret --secret-name hello-tls --mount-path /run/secrets/nginx
+ 1203  watch oc get pods
+ 1204  c
+ 1205  openssl x509 -in hello-secure-combined.pem -noout -ext 'subjectAltName'
+ 1206  oc create route passthrough --service hello-secure --hostname hello-secure.apps.ocp4.example.com
+ 1207  c
+ 1208  curl -s https://hello-secure.apps.ocp4.example.com | grep -i Hello
+ 1209  c
+ 1210  oc autoscale deployment/hello-secure --min 1 --max 5 --cpu-percent 80
+ 1211  c
+ 1212  ~/DO280/solutions/review-template/test-hpa.sh
+ 1213  cd 
+ 1214  c
+ 1215  lab review-troubleshoot start
+ 1216  source /usr/local/etc/ocp4.config 
+ 1217  cat /usr/local/etc/ocp4.config
+ 1218  oc loign -u kubeadmin -p ${RHT_ocp4_KUBEADMIN_PASSWD} https://api.ocp4.example.com:6443
+ 1219  oc login -u kubeadmin -p ${RHT_ocp4_KUBEADMIN_PASSWD} https://api.ocp4.example.com:6443
+ 1220  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADMIN_PASSWD} https://api.ocp4.example.com:6443
+ 1221  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+ 1222  oc new-project review-troubleshoot
+ 1223  oc new-app -h
+ 1224  oc new-app -h | more
+ 1225  oc new-app --name hello-world-nginx https://github.com/RedHatTraining/DO280-apps --context-dir hello-world-nginx
+ 1226  oc get service
+ 1227  oc expose hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+ 1228  oc expose service hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+ 1229  oc get route
+ 1230  oc get pod
+ 1231  curl -s "hello-world.apps.ocp4.example.com" | grep -i HTTP
+ 1232  curl -s "hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1233  touch /tmp/cluster-users
+ 1234  for USER in admin leader developer qa-engineer; do htpasswd -B -b /tmp/cluster-users "${USER}" review; done
+ 1235  cat /tmp/cluster-users 
+ 1236  oc create -h
+ 1237  oc create secret -h
+ 1238  oc create secret generic -h
+ 1239  oc create secret generic -h > help
+ 1240  vi help
+ 1241  c
+ 1242  oc create secret generic -h 
+ 1243  vi help
+ 1244  oc create secret -h
+ 1245* 
+ 1246  oc create secret generic --from-file -h
+ 1247  htpasswd -h
+ 1248  htpasswd -help
+ 1249  man htpasswd
+ 1250  c
+ 1251  pwd
+ 1252  oc create secret generic compreview-users --from-file htpasswd=/tmp/cluster-users -n openshift-config
+ 1253  oc get secret
+ 1254  oc get secret -n openshift-config
+ 1255  c
+ 1256  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+ 1257  cat /tmp/oauth.yaml 
+ 1258  vim /tmp/oauth.yaml
+ 1259  cd DO280
+ 1260  ls
+ 1261  cd labs/
+ 1262  ls
+ 1263  cd review-troubleshoot/
+ 1264  ls
+ 1265  cat famous-quotes.yaml 
+ 1266  oc get templates -n openshift
+ 1267  oc get templates -n openshift | more
+ 1268  oc descript templates cakephp-mysql-example -n openshift | more
+ 1269  oc describe templates cakephp-mysql-example -n openshift | more
+ 1270  oc get  identities -o yaml
+ 1271  oc get useridentitymappings.user.openshift.io -o yaml
+ 1272  oc get pod
+ 1273  kubectl get pod
+ 1274  podman get pod
+ 1275  podman get ps
+ 1276  podman ps
+ 1277  podman ps -a
+ 1278  oc describe pod hello-world-nginx-647ff6c45-75cmc 
+ 1279  oc describe pod hello-world-nginx-647ff6c45-75cmc  -o yaml
+ 1280  oc get pod hello-world-nginx-647ff6c45-75cmc -o yaml
+ 1281  oc describe oauth.config.openshift.io
+ 1282  oc describe oauth.config.openshift.io/cluster
+ 1283  oc types
+ 1284  oc type
+ 1285  oc
+ 1286  oc get
+ 1287  oc type -h
+ 1288  oc types
+ 1289   oc explain pods
+ 1290  oc get ns
+ 1291  oc get pod -n openshift-oauth-apiserver 
+ 1292  oc get pod  apiserver-d4dddf5fc-9v4tb -o yaml -n openshift-oauth-apiserver 
+ 1293  oc get pod  apiserver-d4dddf5fc-9v4tb -o yaml -n openshift-oauth-apiserver > tmp.yaml
+ 1294  vi tmp.yaml 
+ 1295  oc get pod -n openshift-oauth-apiserver 
+ 1296  oc get ns | more
+ 1297  oc get pod -n openshift-authentication
+ 1298  oc get pod oauth-openshift-7d868cbd58-2kl9t -o yaml -n openshift-oauth-apiserver > tmp.yaml
+ 1299  oc get pod oauth-openshift-7d868cbd58-2kl9t -o yaml -n openshift-authentication > tmp.yaml
+ 1300  vi tmp.yaml 
+ 1301  ping 8.8.8.8
+ 1302  curl -s "https://docs.okd.io/4.9/authentication/identity_providers/configuring-htpasswd-identity-provider.html"
+ 1303  curl -s "https://docs.okd.io/4.9/authentication/identity_providers/configuring-htpasswd-identity-provider.html" > tmp.html
+ 1304  vi tmp.html 
+ 1305  curl -Ls "https://docs.okd.io/4.9/authentication/identity_providers/configuring-htpasswd-identity-provider.html"
+ 1306  curl -h
+ 1307  curl -h | more
+ 1308  curl -I "https://docs.okd.io/4.9/authentication/identity_providers/configuring-htpasswd-identity-provider.html"
+ 1309  pwd
+ 1310  ls
+ 1311  vi /tmp/oauth.yaml 
+ 1312  cat /tmp/oauth.yaml 
+ 1313  oc replace -f /tmp/oauth.yaml 
+ 1314  oc get oauth cluster -o yaml > /tmp/oauth2.yaml
+ 1315  cat /tmp/oauth2.yaml 
+ 1316  oc get templates -n openshift
+ 1317  oc get templates -n openshift > tmp
+ 1318  vi tmp
+ 1319  oc get -o yaml --export all > tmp
+ 1320  oc get -o yaml -h
+ 1321  oc get -o yaml -h > tmp
+ 1322  vi tmp
+ 1323  oc get -h
+ 1324  oc get -h > tmp
+ 1325  vi tmp
+ 1326  oc get -o yaml -A > tmp
+ 1327  oc get  -A > tmp
+ 1328  oc get --export all
+ 1329  oc get -o yaml all > tmp
+ 1330  vi tmp
+ 1331  oc get crd
+ 1332  oc get crd > tmp
+ 1333  vi tmp
+ 1334  oc get all
+ 1335  oc get all > tmp2
+ 1336  vi tmp2
+ 1337  pwd
+ 1338  ls
+ 1339  vi tmp
+ 1340  cat tmp
+ 1341  oc decribe storagestates.migration.k8s.io
+ 1342  oc describe storagestates.migration.k8s.io
+ 1343  oc describe crd  storagestates.migration.k8s.io
+ 1344* oc describe crd  storagestates.migration.k8s.io
+ 1345  oc describe crd all
+ 1346  oc describe crd -h
+ 1347  oc describe crd -A
+ 1348  oc describe crd -A > tmp
+ 1349  vi tmp
+ 1350  oc get crd -h
+ 1351  oc get crd -h |more
+ 1352  oc get ct
+ 1353  oc get crd
+ 1354  history
+ 1355  oc adm policy add-cluster-role-to-user cluster-admin admin
+ 1356  oc get pods -n openshift-authentication
+ 1357  oc login -u admin -p review
+ 1358  oc get project
+ 1359  for GROUP in leaders developers qa; do oc adm groups new "${GROUP}"; done
+ 1360  oc adm groups add-users leaders leader
+ 1361  oc adm groups add-users developers developer
+ 1362  oc adm groups add-users qa qa-engineer
+ 1363  oc adm policy add-cluster-role-to-group self-provisioner leaders
+ 1364  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+ 1365  oc policy add-role-to-group edit developers
+ 1366  oc policy add-role-to-group view qa
+ 1367  oc login -u developer -p review
+ 1368  oc new-app --name mysql --image registry.redhat.io/rhel8/mysql-80:1-139
+ 1369  oc create secret generic mysql --from-literal password=r3dh4t123
+ 1370  oc get pod
+ 1371  oc set env deployment mysql --prefix MYSQL_ROOT_ --from secret/mysql
+ 1372  oc get pod
+ 1373  oc describe pod mysql-798569dcdc-4gxmv > mysqlpod
+ 1374  c
+ 1375  oc get deployment
+ 1376  oc set volumes deployment/mysql --name mysql-storage \
+ 1377  oc set volumes -h
+ 1378  oc set volumes -h > tmp
+ 1379  vi tmp
+ 1380  oc set volume dc/mysql --add --name=mysql-storagae -t pvc --claim-size 2Gi --claim-mode rwo -m /var/lib/mysql/data
+ 1381  vi tmp
+ 1382  oc get dc
+ 1383  oc get deployment
+ 1384  oc set volume deploy/mysql --add --name=mysql-storagae -t pvc --claim-size 2Gi --claim-mode rwo -m /var/lib/mysql/data
+ 1385  oc get pod -l
+ 1386  oc get pod -l deployment=mysql
+ 1387  oc get pod  deployment=mysql
+ 1388  oc get pod  -h
+ 1389  oc get pod  -h > tmp
+ 1390  vi tmp
+ 1391  oc get pvc
+ 1392  oc get pod
+ 1393  oc exec -it mysql-5844b5ff54-mp82v df -h /var/lib/mysql/data
+ 1394  oc exec -h
+ 1395  oc exec -h > tmp
+ 1396  vi tmp
+ 1397  oc exec -it mysql-5844b5ff54-mp82v /bin/bash
+ 1398  oc exec -it mysql-5844b5ff54-mp82v -- df -h /var/lib/mysql/data
+ 1399  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB
+ 1400  vim cmd
+ 1401  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1402  oc 
+ 1403  oc get pod
+ 1404  vi cmd
+ 1405  vi cmd2
+ 1406  diff cmd cmd2
+ 1407  vi cmd
+ 1408  diff cmd cmd2
+ 1409  cat cmd
+ 1410  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1411  oc get pod
+ 1412  oc logs wordpress-76b74f99f-chj2c
+ 1413  oc get deploy
+ 1414  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1415  oc get pod
+ 1416  oc create serviceaccount wordpress-sa
+ 1417  oc login -u admin -p review
+ 1418  oc adm policy -h > help
+ 1419  vi help
+ 1420  oc admin policy add-scc-to-user -h
+ 1421  oc adm policy add-scc-to-user -h
+ 1422  oc adm policy add-scc-to-user -z wordpress-sa
+ 1423  oc adm policy add-scc-to-user anyuid-z wordpress-sa
+ 1424  oc login -u developer -p review
+ 1425  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1426  oc describe deploy/wordpress
+ 1427  oc describe deploy/wordpress | grep wordpress
+ 1428  oc describe deploy/wordpress-sa
+ 1429  oc describe deploy/wordpress
+ 1430  oc describe deploy/wordpress | grep wordpress-sa
+ 1431  c
+ 1432  oc get pods -l deploy/wordpress
+ 1433  oc get pods -l deployment=mysql
+ 1434  oc exec mysql-5844b5ff54-mp82v -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1435  oc get svc
+ 1436  oc get route
+ 1437  oc expose service wordpress --hostname wordpress.apps.ocp4.example.com
+ 1438  oc get route
+ 1439  oc get pod
+ 1440  oc logs wordpress-845575c54b-7zxfn
+ 1441  oc get pods -l deployment=mysql
+ 1442  history
+ 1443  oc get pod
+ 1444  oc get secret
+ 1445  oc describe secret/mysql
+ 1446  oc get pod
+ 1447  oc describe pod wordpress-845575c54b-7zxfn
+ 1448  oc describe pod wordpress-845575c54b-7zxfn | more
+ 1449  oc describe pod wordpress-845575c54b-7zxfn > tmp
+ 1450  /wordpress
+ 1451  vi tmp
+ 1452  oc get pod
+ 1453  oc exec -it mysql-5844b5ff54-mp82v /bin/bash
+ 1454  oc get pod
+ 1455  oc get pods
+ 1456  oc logs wordpress-845575c54b-7zxfn 
+ 1457  oc stop pod wordpress
+ 1458  kubectl get pod
+ 1459  kubectl stop pod 
+ 1460  kubectl -h
+ 1461  kubectl -h | more
+ 1462  podman ps
+ 1463  podman ps -a
+ 1464  podman ps -A
+ 1465  kubectl get node
+ 1466  oc get node
+ 1467  oc get nodes
+ 1468  oc whoami
+ 1469  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1470  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1471  oc set volumes deployment/mysql --name mysql-storage --add --type pvc --claim-size 2Gi --claim-mode rwo --mount-path /var/lib/mysql/data
+ 1472  oc get pod
+ 1473  oc delete pod  wordpress-845575c54b-7zxfn
+ 1474  oc get pod
+ 1475  oc get logs wordpress-845575c54b-22tzc
+ 1476  oc logs wordpress-845575c54b-22tzc
+ 1477   oc get events
+ 1478  oc get deploy
+ 1479  oc delete deployment wordpress
+ 1480  oc get deploy
+ 1481  oc get pod
+ 1482  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDSS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1483  oc delete deployment wordpress
+ 1484  oc get svc
+ 1485  oc delete svc wordpress
+ 1486  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDSS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1487  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1488  oc create serviceaccount wordpress-sa
+ 1489  oc login -u admin -p review
+ 1490  oc login -u developer -p review
+ 1491  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1492  oc expose service wordpress --hostname wordpress.apps.ocp
+ 1493  lab review-troubleshoot finish
+ 1494  cd 
+ 1495  lab review-troubleshoot finish
+ 1496  lab review-troubleshoot start
+ 1497  source /usr/local/etc/ocp4.config
+ 1498  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+ 1499  oc new-project review-troubleshoot
+ 1500  oc new-app --name hello-world-nginx https://github.com/RedHatTraining/DO280-apps --context-dir hello-world-nginx
+ 1501  oc expose service hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+ 1502  oc get route
+ 1503  oc get pods
+ 1504  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1505  touch /tmp/cluster-users
+ 1506  for USER in admin leader developer qa-engineer; do htpasswd -B -b /tmp/cluster-users "${USER}" review; done
+ 1507  oc create secret generic compreview-users --from-file htpasswd=/tmp/cluster-users -n openshift-config
+ 1508  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+ 1509  vim /tmp/oauth.yaml
+ 1510  oc replace -f /tmp/oauth.yaml
+ 1511  oc adm policy add-cluster-role-to-user cluster-admin admin
+ 1512  oc get pods -n openshift-authentication
+ 1513  oc login -u admin -p review
+ 1514  for GROUP in leaders developers qa; do oc adm groups new "${GROUP}"; done
+ 1515  oc adm groups add-users leaders leader
+ 1516  oc adm groups add-users developers developer
+ 1517  oc adm groups add-users qa qa-engineer
+ 1518  oc adm policy add-cluster-role-to-group self-provisioner leaders
+ 1519  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+ 1520  oc policy add-role-to-group edit developers
+ 1521  oc policy add-role-to-group view qa
+ 1522  oc login -u developer -p review
+ 1523  oc new-app --name mysql --image registry.redhat.io/rhel8/mysql-80:1-139
+ 1524  oc create secret generic mysql --from-literal password=r3dh4t123
+ 1525  oc set env deployment
+ 1526  oc set env deployment mysql --prefix MYSQL_ROOT_ --from secret/mysql
+ 1527  oc set volumes deployment/mysql --name mysql-storage --add --type pvc --claim-size 2Gi --claim-mode rwo --mount-path /var/lib/mysql/data
+ 1528  oc get pods -l deployment=mysql
+ 1529  oc get pvc
+ 1530  oc exec -it mysql-bbb6b5fbb-dmq9x -- df -h /var/lib/mysql/data
+ 1531  oc get pod
+ 1532  c
+ 1533  oc get pod
+ 1534  oc exec -it  mysql-5bf8d7bfc6-r8j8k   -- df -h /var/lib/mysql/data
+ 1535  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1536  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1537  oc create serviceaccount wordpress-sa
+ 1538  oc login -u admin -p review
+ 1539  oc adm policy add-scc-to-user anyuid -z wordpress-sa
+ 1540  oc login -u developer -p review
+ 1541  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1542  oc get pods -l deployment=mysql
+ 1543  oc exec mysql-fbf67ff96-c4sq7 -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1544  oc exec mysql-5bf8d7bfc6-r8j8k -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1545  oc expose service wordpress --hostname wordpress.apps.ocp4.example.com
+ 1546  lab review-troubleshoot finish
+ 1547  source /usr/local/etc/ocp4.config
+ 1548  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+ 1549  oc new-project review-troubleshoot
+ 1550  oc new-app --name hello-world-nginx https://github.com/RedHatTraining/DO280-apps --context-dir hello-world-nginx
+ 1551  oc expose service hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+ 1552  oc get route
+ 1553  oc get pods
+ 1554  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1555  touch /tmp/cluster-users
+ 1556  for USER in admin leader developer qa-engineer; do htpasswd -B -b /tmp/cluster-users "${USER}" review; done
+ 1557  oc create secret generic compreview-users --from-file htpasswd=/tmp/cluster-users -n openshift-config
+ 1558  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+ 1559  vim /tmp/oauth.yaml
+ 1560  oc replace -f /tmp/oauth.yaml
+ 1561  oc adm policy add-cluster-role-to-user cluster-admin admin
+ 1562  oc get pods -n openshift-authentication
+ 1563  oc login -u admin -p review
+ 1564  oc get pods -n openshift-authentication
+ 1565  watch oc get pods -n openshift-authentication
+ 1566  for GROUP in leaders developers qa; do oc adm groups new "${GROUP}"; done
+ 1567  oc adm groups add-users leaders leader
+ 1568  oc adm groups add-users developers developer
+ 1569  oc adm groups add-users qa qa-engineer
+ 1570  oc adm policy add-cluster-role-to-group self-provisioner leaders
+ 1571  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+ 1572  oc policy add-role-elopers
+ 1573  oc policy add-role-to-group edit developers
+ 1574  oc policy add-role-to-group view qa
+ 1575  oc login -u developer -p review
+ 1576  oc new-app --name mysql --image registry.redhat.io/rhel8/mysql-80:1-139
+ 1577  oc create secret generic mysql --from-literal password=r3dh4t123
+ 1578  oc set env deployment mysql --prefix MYSQL_ROOT_ --from secret/mysql
+ 1579  oc set volumes deployment/mysql --name mysql-storage --add --type pvc --claim-size 2Gi --claim-mode rwo --mount-path /var/lib/mysql/data
+ 1580  oc get pods -l deployment=mysql
+ 1581  oc get pvc
+ 1582  oc exec -it mysql-bbb6b5fbb-dmq9x -- df -h /var/lib/mysql/data
+ 1583  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1584  c
+ 1585  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1586  oc create serviceaccount wordpress-sa
+ 1587  oc login -u admin -p review
+ 1588  oc adm policy r anyuid -z wordpress-sa
+ 1589  oc adm policy add-scc-to-user anyuid -z wordpress-sa
+ 1590  oc login -u developer -p review
+ 1591  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1592  oc get pods -l deployment=mysql
+ 1593  oc exec mysql-fbf67ff96-c4sq7 -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1594  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1595  man fc
+ 1596  fc -t
+ 1597  fc -l
+ 1598  oc exec mysql-fbf67ff96-c4sq7 -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1599  man fc
+ 1600  fc -ln
+ 1601  fc -l
+ 1602  oc get pod
+ 1603  oc adm policy add-scc-to-user anyuid -z wordpress-sa
+ 1604  fc -l
+ 1605  oc exec mysql-7c6d9c6456-g9cx5 -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1606  oc exec mysql-7c6d9c6456-g9cx5 /bin/bash
+ 1607  oc exec mysql-7c6d9c6456-g9cx5 -it /bin/bash
+ 1608  oc expose service wordpress --hostname wordpress.apps.ocp4.example.com
+ 1609  oc get svc
+ 1610  cat ~/DO280/labs/review-troubleshoot/deploy_famous-quotes.sh
+ 1611  cd ~/DO280/labs/review-troubleshoot
+ 1612  pwd
+ 1613  cd DO280
+ 1614  cd ~
+ 1615  pwd
+ 1616  cd DO280
+ 1617  cd labs
+ 1618  ls
+ 1619  lab review-troubleshoot finish
+ 1620  lab review-troubleshoot start
+ 1621  ls
+ 1622  source /usr/local/etc/ocp4.config
+ 1623  oc login -u kubeadmin -p ${RHT_OCP4_KUBEADM_PASSWD} https://api.ocp4.example.com:6443
+ 1624  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1625  oc new-project review-troubleshoot
+ 1626  oc new-app --name hello-world-nginx https://github.com/RedHatTraining/DO280-apps --context-dir hello-world-nginx
+ 1627  oc expose service hello-world-nginx --hostname hello-world.apps.ocp4.example.com
+ 1628  oc get route
+ 1629  oc get pods
+ 1630  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1631  oc get pods
+ 1632  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1633  oc get route
+ 1634  curl -s "http://hello-world.apps.ocp4.example.com" | grep -i Hello
+ 1635  touch /tmp/cluster-users
+ 1636  for USER in admin leader developer qa-engineer; do htpasswd -B -b /tmp/cluster-users "${USER}" review; done
+ 1637  oc create secret generic compreview-users --from-file htpasswd=/tmp/cluster-users -n openshift-config
+ 1638  oc get oauth cluster -o yaml > /tmp/oauth.yaml
+ 1639  vim /tmp/oauth.yaml
+ 1640  oc replace -f /tmp/oauth.yaml
+ 1641  oc adm policy add-cluster-role-to-user cluster-admin admin
+ 1642  oc get pods -n openshift-authentication
+ 1643  oc login -u admin -p review
+ 1644  for GROUP in leaders developers qa; do oc adm groups new "${GROUP}"; done
+ 1645  oc adm groups add-users leaders leader
+ 1646  oc adm groups add-users developers developer
+ 1647  oc adm groups add-users qa qa-engineer
+ 1648  oc adm policy add-cluster-role-to-group self-provisioner leaders
+ 1649  oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth
+ 1650  oc policy add-role-to-group edit developers
+ 1651  oc policy add-role-to-group view qa
+ 1652  oc login -u developer -p review
+ 1653  oc new-app --name mysql --image registry.redhat.io/rhel8/mysql-80:1-139
+ 1654  oc create secret generic mysql --from-literal password=r3dh4t123
+ 1655  oc set env deployment mysql --prefix MYSQL_ROOT_ --from secret/mysql
+ 1656  oc set volumes deployment/mysql --name mysql-storage --add --type pvc --claim-size 2Gi --claim-mode rwo --mount-path /var/lib/mysql/data
+ 1657  oc get pods -l deployment=mysql
+ 1658  oc get pvc
+ 1659  oc get pods -l deployment=mysql
+ 1660  oc exec -it mysql-bbb6b5fbb-dmq9x -- df -h /var/lib/mysql/data
+ 1661  oc exec -it  mysql-7f847bfc87-rcqzf-- df -h /var/lib/mysql/data
+ 1662  oc new-app --name wordpress --image quay.io/redhattraining/wordpress:5.7-php7.4-apache -e WORDPRESS_DB_HOST=mysql -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_DB_USER=root -e WORDPRESS_USER=wpuser -e WORDPRESS_PASSWORD=wppass -e WORDPRESS_TITLE=review-troubleshoot -e WORDPRESS_URL=wordpress.apps.ocp4.example.com -e WORDPRESS_EMAIL=student@redhat.com
+ 1663  oc set env deployment/wordpress --prefix WORDPRESS_DB_ --from secret/mysql
+ 1664  oc create serviceaccount wordpress-sa
+ 1665  oc login -u admin -p review
+ 1666  oc adm policy add-scc-to-user anyuid -z wordpress-sa
+ 1667  oc login -u developer -p review
+ 1668  oc set serviceaccount deployment/wordpress wordpress-sa
+ 1669  oc get pods -l deployment=mysql
+ 1670  oc exec mysql-7f847bfc87-rcqzf -- /usr/bin/mysql -uroot -e "CREATE DATABASE wordpress"
+ 1671  oc expose service wordpress --hostname wordpress.apps.ocp4.example.com
+ 1672  ~/DO280/labs/review-troubleshoot/deploy_famous-quotes.sh
+ 1673  oc set env deployment famous-quotes --prefix QUOTES_ --from secret/mysql
+ 1674  oc get pods -l app=famous-quotes
+ 1675  oc get events --sort-by='{.lastTimestamp}' | grep -i Scheduling
+ 1676  oc get deployment/famous-quotes -o yaml > /tmp/famous-deploy.yaml
+ 1677  vim /tmp/famous-deploy.yaml
+ 1678  oc replace -f /tmp/famous-deploy.yaml
+ 1679  oc get pods -l app=famous-quotes
+ 1680  oc expose service famous-quotes --hostname quotes.apps.ocp4.example.com
+ 1681  curl -s "http://quotes.apps.ocp4.example.com" | egrep '</?title>'
+ 1682  lab review-troubleshoot grade
+ 1683  lab review-troubleshoot finish
+ 1684  ftp 
+ 1685  scp
+ 1686  c
+ 1687  pwd
+ 1688  cd ~
+ 1689  ls
+ 1690  git config --global credential.helper cache
+ 1691  mkdir testfolder
+ 1692  cd testfolder/
+ 1693  git checkout -b testfolder
+ 1694  git config --global user.name
+ 1695  git config --global user.email
+ 1696  git config --global user.name "Johnnytwma"
+ 1697  git config --global user.email "johnnyema@gmail.com"
+ 1698  git config --list
+ 1699  git init
+ 1700  touch testfile
+ 1701  vi testfile 
+ 1702  git status
+ 1703  git log
+ 1704  git add .
+ 1705  git commit -m "testpush"
+ 1706  git remote add origin https://github.com/Johnnytwma/DO280.git
+ 1707  git branch -M main
+ 1708  git push -u origin main
+ 1709  git status
+ 1710  git log
+ 1711  history
+ 1712  history >> history_20230221
